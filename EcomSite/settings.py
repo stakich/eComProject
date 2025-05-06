@@ -27,10 +27,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-MY_APPS = ['store', 'cart']
 # Application definition
 
 INSTALLED_APPS = [
+    'store.apps.StoreConfig',
+    'cart',
+
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -72,10 +74,21 @@ WSGI_APPLICATION = 'EcomSite.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "ecomdb",
+        "USER": "postgres",
+        "PASSWORD": "030507",
+        "HOST": "127.0.0.1",
+        "PORT": "5432",
     }
 }
 
