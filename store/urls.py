@@ -1,6 +1,6 @@
-from django.urls import path # type: ignore
+from django.urls import path, include  # type: ignore
 from . import views
 
 urlpatterns = [
-    path('', views.home, name='home'),
+    path('', views.store, name='store'),
 ]
