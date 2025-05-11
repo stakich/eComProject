@@ -1,0 +1,48 @@
+{% extends "./base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <main class="pt-5">
+        <div class="row g-5 align-items-center">
+
+            <!-- Product Image -->
+            <div class="col-md-6 text-center bg-light p-4">
+                <img class="img-fluid w-75 shadow rounded" alt="{{ product.title }}" src="{{ product.image.url }}">
+            </div>
+
+            <!-- Product Info -->
+            <div class="col-md-6 d-flex flex-column justify-content-center h-100 px-4">
+                <h1 class="display-6 fw-bold mb-1">{{ product.title }}</h1>
+                <p class="text-muted fs-5 mb-3"><strong>{{ product.brand }}</strong></p>
+
+                <p class="fs-5">{{ product.description }}</p>
+
+                <div class="border rounded p-3 mt-3">
+                    <div class="row border-bottom pb-3 mb-3">
+                        <div class="col-6 fs-5">Price</div>
+                        <div class="col-6 text-end fs-4 fw-bold">${{ product.price }}</div>
+                    </div>
+
+                    <div class="row align-items-center">
+                        <div class="col-6">
+                            <label for="select" class="form-label fw-semibold">Qty</label>
+                            <select id="select" class="form-select form-select-sm w-50 d-inline-block">
+                                {% for i in "1234" %}
+                                <option value="{{ i }}">{{ i }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-6 text-end">
+                            <button type="button" id="add-button" class="btn btn-primary btn-sm px-4">
+                                Add to cart
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+</div>
+{% endblock %}
