@@ -34,7 +34,7 @@
                             </select>
                         </div>
                         <div class="col-6 text-end">
-                            <button type="button" id="add-button" class="btn btn-primary btn-sm px-4">
+                            <button type="button" id="add-button" value="{{product.id}}" class="btn btn-primary btn-sm px-4">
                                 Add to cart
                             </button>
                         </div>
@@ -45,4 +45,39 @@
         </div>
     </main>
 </div>
+
+
+<script>
+    $(document).on('click', '#add-button', function(e) {
+
+        e.preventDefault();
+
+        $.ajax({
+            
+            type: 'POST',
+            url: '{% url "cart-add" %}',
+            data: {
+                product_id: $('#add-button').val(),
+                product_qty: $('#select option:selected').text(),
+                csrfmiddlewaretoken: "{{csrf_token}}",
+                action: 'post'
+
+
+            },
+
+            success: function(json){
+                console.log(json)
+            },
+
+            error: function(xhr, errmsg, err){
+
+            },
+
+        });
+
+    })
+
+
+</script>
+
 {% endblock %}
