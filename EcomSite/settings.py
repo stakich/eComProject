@@ -32,6 +32,7 @@ ALLOWED_HOSTS = []
 INSTALLED_APPS = [
     'store.apps.StoreConfig',
     'cart',
+    'mathfilters',
 
     'django.contrib.admin',
     'django.contrib.auth',
