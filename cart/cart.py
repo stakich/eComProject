@@ -39,22 +39,34 @@ class Cart():
         return sum(item['qty'] for item in self.cart.values())
     
     def __iter__(self):
-        all_products_ids = self.cart.keys()
+        
+        product_ids = [int(pid) for pid in self.cart.keys()]
+        products = Product.objects.filter(id__in=product_ids)
 
-        products = Product.objects.filter(id__in=all_products_ids)
+        product_map = {p.id: p for p in products}
 
-        cart = self.cart.copy()
-
-        for product in products:
-            cart[str(product.id)]['product'] = product
-
-
-        for item in cart.values():
-            item['price'] = Decimal(item['price'])
-            item['total'] = item['price'] * item['qty']
-            print()
-            yield item
+        # 3. Single loop: pull data, convert price, compute total, attach product
+        for pid_str, item in self.cart.items():
+            pid   = int(pid_str)
+            price = Decimal(item['price'])
+            qty   = item['qty']
+            yield {
+                'product': product_map.get(pid),
+                'price':   price,
+                'qty':     qty,
+                'total':   price * qty,
+            }
 
     def get_total(self):
         return sum(Decimal(item['price']) * item['qty'] for item in self.cart.values())
             
+
+    def update(self, product, qty):
+
+        product_id = str(product)
+
+        if product_id in self.cart:
+            self.cart[product_id]['qty'] = qty
+        
+
+        self.session.modified = True

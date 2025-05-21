@@ -33,6 +33,9 @@ INSTALLED_APPS = [
     'store.apps.StoreConfig',
     'cart',
     'mathfilters',
+    'account',
+    'crispy_forms',
+    'crispy_bootstrap5',
 
     'django.contrib.admin',
     'django.contrib.auth',
@@ -132,6 +135,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
+CRISPY_TEMPLATE_PACK          = "bootstrap5"
 
 MEDIA_URL   = '/media/'
 MEDIA_ROOT  = BASE_DIR / 'static/media'
