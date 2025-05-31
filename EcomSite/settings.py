@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 
+from django.urls import reverse_lazy
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -142,7 +144,18 @@ CRISPY_TEMPLATE_PACK          = "bootstrap5"
 MEDIA_URL   = '/media/'
 MEDIA_ROOT  = BASE_DIR / 'static/media'
 
+
+LOGIN_REDIRECT_URL = reverse_lazy("dashboard")
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = 'stanislav030507e@gmail.com' # - Enter your gmail address
+EMAIL_HOST_PASSWORD = 'rpjfqsohevgvovew'

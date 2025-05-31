@@ -1,10 +1,14 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
+from django.forms.widgets import PasswordInput, TextInput
 from django.core.validators import (
     EmailValidator, MaxLengthValidator, MinLengthValidator
 )
 from django.core.exceptions import ValidationError
+
+
+
 
 DISPOSABLE_DOMAINS = {
     "tempmail.com", "mailinator.com", "dispostable.com",
@@ -54,3 +58,12 @@ class RegisterUserForm(UserCreationForm):
                 "This email is already taken. Please use another one."
             )
         return email
+    
+
+class LoginUserForm(AuthenticationForm):
+
+    username = forms.CharField(widget=TextInput())
+    password = forms.CharField(widget=PasswordInput())
+
+    class Meta:
+        model = User

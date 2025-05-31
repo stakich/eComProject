@@ -1,0 +1,39 @@
+{% include "store/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+  <style>
+    body {
+      background-color: gray;
+    }
+    .form-layout {
+      border-radius: 10px;
+      max-width: 800px;
+      margin: 2em auto;
+      padding: 1.5rem;
+    }
+  </style>
+
+  <div class="container bg-white shadow-md form-layout">
+    <h3>Login to your account</h3>
+    <hr><br>
+    <form method="POST" autocomplete="off">
+      {% csrf_token %}
+      {{ form.username|as_crispy_field }}
+      <br>
+      {{ form.password|as_crispy_field }}
+      <br>
+      <button type="submit" class="btn btn-primary navbar-btn text-white w-100 p-2">
+        <i class="fa fa-key" aria-hidden="true"></i>  Login
+      </button>
+      <br><br>
+      {{ form.non_field_errors }}
+      <div class="text-center">
+        <a href="{% url 'register' %}">Don't have an account?</a>
+        <br><br>
+        <a href="#">Forgotten your password?</a>
+      </div>
+    </form>
+  </div>
+{% endblock %}

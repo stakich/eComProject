@@ -1,0 +1,10 @@
+<h1>This is your dashboard</h1>
+
+{% if user.is_authenticated%}
+<form method="post" action="{% url 'user-logout' %}" style="display:inline;">
+  {% csrf_token %}
+  <button type="submit" class="btn btn-link">Logout</button>
+</form>
+{% else %}
+ <p>Please <a href="{% url 'login' %}">log in</a>.</p>
+{% endif %}

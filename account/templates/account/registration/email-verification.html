@@ -1,0 +1,12 @@
+{% autoescape off %}
+
+
+Hi,
+Thank you for registering with us! To complete your registration, please verify your email address by clicking the link below:
+http://{{domain}}{% url 'email_verification' uidb64=uid token=token %}
+
+
+
+
+
+{% endautoescape %}
