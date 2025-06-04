@@ -1,0 +1,123 @@
+{% include "store/base.html" %}
+
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <style>
+        body{
+            background-color: gray;
+        }
+        .modal-confirm {
+            color: #636363;
+        }
+        .modal-confirm .modal-content {
+            padding: 20px;
+            border-radius: 5px;
+            border: none;
+        }
+        .modal-confirm .modal-header {
+            border-bottom: none;
+            position: relative;
+            text-align: center;
+            border-radius: 5px 5px 0 0;
+        }
+        .modal-confirm h4 {
+            color: #f15e5e;
+        }
+        .modal-confirm .close {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+        }
+        .modal-confirm .modal-footer {
+            border: none;
+            text-align: center;
+            border-radius: 5px;
+        }
+    </style>
+
+    <body>
+        <br>
+        <div class="container bg-white shadow-md p-5 form-layout">
+            <h3> Account deletion </h3>
+            <hr>
+            <p> Are you sure that you want to delete your account? </p>
+            <br>
+
+            <form method="POST" autocomplete="off" id="deleteForm">
+                {% csrf_token %}
+                
+                <button type="button" class="btn btn-danger navbar-btn text-white" onclick="showConfirmModal()"> 
+                    &nbsp; Delete your account 
+                </button>
+                <br> <br>
+                <a class="btn btn-primary navbar-btn text-white" type="button"  href="{% url 'profile-management' %}"> 
+                    <i class="fa fa-arrow-left" aria-hidden="true"></i> &nbsp; Go back 
+                </a>
+            </form>
+        </div>
+
+        <!-- Confirmation Modal -->
+        <div class="modal fade modal-confirm" id="confirmationModal" tabindex="-1" role="dialog">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title w-100">Are you sure?</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>This action cannot be undone. All your data will be permanently deleted.</p>
+                    </div>
+                    <div class="modal-footer justify-content-center">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger" onclick="confirmDelete()">Delete Account</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function showConfirmModal() {
+                $('#confirmationModal').modal('show');
+            }
+
+            function confirmDelete() {
+                document.getElementById('deleteForm').submit();
+            }
+        </script>
+    </body>
+
+    <br> <br>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

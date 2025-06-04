@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, UserChangeForm
 from django.contrib.auth.models import User
 from django.forms.widgets import PasswordInput, TextInput
 from django.core.validators import (
@@ -45,7 +45,6 @@ class RegisterUserForm(UserCreationForm):
 
     def clean_email(self):
         email = self.cleaned_data["email"].lower()
-        # check local-part length (EmailField doesn’t do this for you)
         local_part = email.split("@", 1)[0]
         if len(local_part) > 64:
             raise forms.ValidationError(
@@ -67,3 +66,24 @@ class LoginUserForm(AuthenticationForm):
 
     class Meta:
         model = User
+
+
+class UpdateUserForm(UserChangeForm):
+    
+    def __init__(self, *args, **kwargs):
+        super(UpdateUserForm, self).__init__(*args, **kwargs)
+
+        self.fields['email'].required = True
+
+    class Meta(UserChangeForm.Meta):
+        model = User
+
+        fields = ['username', 'email']  
+
+
+    def clean_email(self):
+        email = self.cleaned_data.get('email').strip()
+        
+        if User.objects.filter(email__iexact=email).exclude(pk=self.instance.pk).exists():
+            raise forms.ValidationError("This email address is already in use.")
+        return email

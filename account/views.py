@@ -1,8 +1,8 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, View, TemplateView
+from django.views.generic import CreateView, View, TemplateView, UpdateView, DeleteView
 from django.contrib.auth.models import User, auth
-from .forms import RegisterUserForm, LoginUserForm
+from .forms import RegisterUserForm, LoginUserForm, UpdateUserForm
 from django.contrib.sites.shortcuts import get_current_site
 from .token import user_tokenizer_generate
 from django.template.loader import render_to_string
@@ -10,7 +10,7 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 
 
@@ -95,11 +95,31 @@ class LoginFormView(LoginView):
 
 #                 return redirect('store')
 
-class DashboardView(LoginRequiredMixin, TemplateView):
+class DashboardView(LoginRequiredMixin,TemplateView):
     template_name = "account/dashboard.html"
     login_url = reverse_lazy('login')
 
 
-class LogoutUserView(LoginRequiredMixin, LogoutView):
+class LogoutUserView(LoginRequiredMixin,LogoutView):
     next_page = reverse_lazy('store')
     login_url = reverse_lazy('login')
+
+
+class ProfileManagementView(LoginRequiredMixin,UpdateView):
+    model = User
+    template_name = "account/profile-management.html"
+    form_class = UpdateUserForm
+    success_url   = reverse_lazy('dashboard')
+
+    def get_object(self, queryset=None):
+        return self.request.user
+
+
+
+class DeleteAccountView(LoginRequiredMixin, DeleteView):
+    template_name = "account/delete-account.html"
+    model = User
+    success_url = reverse_lazy('store')
+
+    def get_object(self, queryset=None):
+        return self.request.user
