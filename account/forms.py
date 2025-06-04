@@ -75,6 +75,11 @@ class UpdateUserForm(UserChangeForm):
 
         self.fields['email'].required = True
 
+        email_field = self.fields['email']
+
+        email_field.validators.append(domain_blocklist)
+        email_field.validators.append(no_whitespace)
+
     class Meta(UserChangeForm.Meta):
         model = User
 
@@ -82,8 +87,21 @@ class UpdateUserForm(UserChangeForm):
 
 
     def clean_email(self):
-        email = self.cleaned_data.get('email').strip()
+        email = self.cleaned_data["email"].lower()
+        local_part = email.split("@", 1)[0]
+        if len(local_part) > 64:
+            raise forms.ValidationError(
+                "The part before the @ is too long (max 64 characters)."
+            )
         
+        if len(email) > 254:
+            raise forms.ValidationError(
+                "Email is too long (max 254 characters)."
+            )
+
+        # case-insensitive uniqueness
         if User.objects.filter(email__iexact=email).exclude(pk=self.instance.pk).exists():
-            raise forms.ValidationError("This email address is already in use.")
+            raise forms.ValidationError(
+                "This email is already taken. Please use another one."
+            )
         return email

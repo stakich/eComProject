@@ -146,6 +146,7 @@ MEDIA_ROOT  = BASE_DIR / 'static/media'
 
 
 LOGIN_REDIRECT_URL = reverse_lazy("dashboard")
+LOGIN_URL = reverse_lazy('my-login')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field

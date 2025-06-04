@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, View, TemplateView, UpdateView, DeleteView
 from django.contrib.auth.models import User, auth
+
+from account.mixins import RedirectAuthenticatedUserMixin
 from .forms import RegisterUserForm, LoginUserForm, UpdateUserForm
 from django.contrib.sites.shortcuts import get_current_site
 from .token import user_tokenizer_generate
@@ -16,11 +18,12 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 
 
 # Create your views here.
-class RegisterView(CreateView):
+class RegisterView(RedirectAuthenticatedUserMixin, CreateView):
     model = User
     form_class = RegisterUserForm
     template_name = "account/registration/register.html"
     success_url = reverse_lazy("store")
+    redirect_authenticated_user_to = reverse_lazy('dashboard')
 
 
     def form_valid(self, form):
@@ -61,6 +64,13 @@ class EmailVerificationView(View):
             return redirect("email_verification_success")
 
         return redirect("email_verification_failed")
+    
+    def test_func(self):
+        return not self.request.user.is_authenticated
+    
+    def handle_no_permission(self):
+        return redirect(self.redirect_authenticated_user_to)
+
 
 
 class EmailVerificationSentView(TemplateView):
@@ -73,10 +83,11 @@ class EmailVerificationSuccessView(TemplateView):
 class EmailVerificationFailedView(TemplateView):
     template_name = "account/registration/email-verification-failed.html"
 
-class LoginFormView(LoginView):
+class LoginFormView(RedirectAuthenticatedUserMixin, LoginView):
     authentication_form = LoginUserForm
     template_name = 'account/login.html'
     success_url = reverse_lazy('dashboard')
+    redirect_authenticated_user_to = reverse_lazy('dashboard')
 
 
 # def my_login(request):
