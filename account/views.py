@@ -12,7 +12,10 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.utils.encoding import force_bytes, force_str
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import LoginView, LogoutView
-from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.messages.views import SuccessMessageMixin
+from django.contrib import messages
+
 
 
 
@@ -115,6 +118,9 @@ class LogoutUserView(LoginRequiredMixin,LogoutView):
     next_page = reverse_lazy('store')
     login_url = reverse_lazy('login')
 
+    def dispatch(self, request, *args, **kwargs):
+        messages.success(request, "You have been logged out successfully.")
+        return super().dispatch(request, *args, **kwargs)
 
 class ProfileManagementView(LoginRequiredMixin,UpdateView):
     model = User
@@ -134,3 +140,7 @@ class DeleteAccountView(LoginRequiredMixin, DeleteView):
 
     def get_object(self, queryset=None):
         return self.request.user
+    
+    def post(self, request, *args, **kwargs):
+        messages.error(request, "You have deleted your account permanently.")
+        return super().post(request, *args, **kwargs)

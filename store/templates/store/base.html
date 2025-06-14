@@ -25,6 +25,7 @@
         .navbar-nav .nav-item {
             display: inline-block;
             margin-right: 5px;
+            margin-left: 5px;
         }
         
         .navbar-nav .nav-item form button {
@@ -72,14 +73,14 @@
             <ul class="navbar-nav ms-auto">
                 {% if user.is_authenticated %}
                     <li class="nav-item">
-                        <a class="btn btn-alert navbar-btn text-white" href="{% url 'dashboard' %}">Dashboard</a>
+                        <a class="btn btn-alert navbar-btn text-white" href="{% url 'dashboard' %}"><i class="fa fa-dashboard"></i>  Dashboard</a>
                     </li>
 
                     <li class="nav-item">
                         <form method="POST" action="{% url 'user-logout' %}" class="d-inline">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-alert navbar-btn text-white">
-                                Logout
+                                <i class="fa fa-sign-out"></i> Logout
                             </button>
                         </form>
                     </li>
@@ -127,6 +128,22 @@
         </div>
     </nav>
 
+    {% for message in messages %}
+
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+
+            <h5 id="message_timer"  class="alert alert-success text-center"> {{ message }} </h5>
+
+        {% endif %}
+
+        {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+
+            <h5 id="message_timer"  class="alert alert-danger text-center"> {{ message }} </h5>
+
+        {% endif %}
+
+    {% endfor %}
+
     <main class="container mt-4">
         {% block content %}
         {% endblock %}
@@ -134,4 +151,6 @@
 
 </body>
 
+
+    <script src="{% static 'js/app.js' %}"></script>
 </html>
