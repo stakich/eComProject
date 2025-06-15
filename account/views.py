@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, View, TemplateView, UpdateView, DeleteView
+from django.views.generic import CreateView, View, TemplateView, UpdateView, DeleteView, DetailView
 from django.contrib.auth.models import User, auth
 
 from account.mixins import RedirectAuthenticatedUserMixin
@@ -15,8 +15,8 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
-
-
+from payment.forms import ShippingAdressForm
+from payment.models import ShippingAdress
 
 
 
@@ -67,13 +67,6 @@ class EmailVerificationView(View):
             return redirect("email_verification_success")
 
         return redirect("email_verification_failed")
-    
-    def test_func(self):
-        return not self.request.user.is_authenticated
-    
-    def handle_no_permission(self):
-        return redirect(self.redirect_authenticated_user_to)
-
 
 
 class EmailVerificationSentView(TemplateView):
@@ -92,22 +85,6 @@ class LoginFormView(RedirectAuthenticatedUserMixin, LoginView):
     success_url = reverse_lazy('dashboard')
     redirect_authenticated_user_to = reverse_lazy('dashboard')
 
-
-# def my_login(request):
-#     form = LoginUserForm
-#     if request.method == 'POST':
-#         form = LoginUserForm(request, data=request.POST)
-
-#         if form.is_valid():
-#             username = request.POST.get('username')
-#             password = request.POST.get('password')
-
-#             user = authenticate(request, username=username, password=password)
-
-#             if user is not None:
-#                 auth.login(request, user)
-
-#                 return redirect('store')
 
 class DashboardView(LoginRequiredMixin,TemplateView):
     template_name = "account/dashboard.html"
@@ -144,3 +121,17 @@ class DeleteAccountView(LoginRequiredMixin, DeleteView):
     def post(self, request, *args, **kwargs):
         messages.error(request, "You have deleted your account permanently.")
         return super().post(request, *args, **kwargs)
+
+class ManageShippingView(LoginRequiredMixin, UpdateView):
+    model = ShippingAdress
+    form_class = ShippingAdressForm
+    template_name = 'account/manage_shipping.html'
+    success_url = reverse_lazy('dashboard')
+
+    def get_object(self, queryset=None):
+        return ShippingAdress.objects.get_or_create(user=self.request.user)[0]
+    
+    def form_valid(self, form):
+        if form.instance.user is None:
+            form.instance.user = self.request.user
+        return super().form_valid(form)
