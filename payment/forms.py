@@ -1,10 +1,10 @@
 from django import forms
-from . models import ShippingAdress
+from . models import ShippingAddress
 
 
-class ShippingAdressForm(forms.ModelForm):
+class ShippingAddressForm(forms.ModelForm):
     class Meta:
 
-        model = ShippingAdress
+        model = ShippingAddress
         
         exclude = ['user',]  # or specify fields to exclude like ['field1', 'field2']

@@ -15,8 +15,8 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
-from payment.forms import ShippingAdressForm
-from payment.models import ShippingAdress
+from payment.forms import ShippingAddressForm
+from payment.models import ShippingAddress
 
 
 
@@ -123,13 +123,13 @@ class DeleteAccountView(LoginRequiredMixin, DeleteView):
         return super().post(request, *args, **kwargs)
 
 class ManageShippingView(LoginRequiredMixin, UpdateView):
-    model = ShippingAdress
-    form_class = ShippingAdressForm
+    model = ShippingAddress
+    form_class = ShippingAddressForm
     template_name = 'account/manage_shipping.html'
     success_url = reverse_lazy('dashboard')
 
     def get_object(self, queryset=None):
-        return ShippingAdress.objects.get_or_create(user=self.request.user)[0]
+        return ShippingAddress.objects.get_or_create(user=self.request.user)[0]
     
     def form_valid(self, form):
         if form.instance.user is None:

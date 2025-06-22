@@ -45,7 +45,6 @@ class Cart():
 
         product_map = {p.id: p for p in products}
 
-        # 3. Single loop: pull data, convert price, compute total, attach product
         for pid_str, item in self.cart.items():
             pid   = int(pid_str)
             price = Decimal(item['price'])
