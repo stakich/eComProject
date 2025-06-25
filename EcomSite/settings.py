@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy # type: ignore
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -145,6 +145,7 @@ CRISPY_TEMPLATE_PACK          = "bootstrap5"
 MEDIA_URL   = '/media/'
 MEDIA_ROOT  = BASE_DIR / 'static/media'
 
+SECURE_CROSS_ORIGIN_OPENER_POLICY = 'same-origin-allow-popups'
 
 LOGIN_REDIRECT_URL = reverse_lazy("dashboard")
 LOGIN_URL = reverse_lazy('my-login')
