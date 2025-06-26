@@ -1,4 +1,3 @@
-
 {% include "store/base.html" %}
 
 {% load static %}
@@ -9,19 +8,14 @@
 {% block content %}
 
 <style>
-
-
-    body{
-
-
+    body {
         background-color: gray;
-
     }
 
-
-
+    .form-layout {
+        border-radius: 20px;
+    }
 </style>
-
 
 <body>
 
@@ -51,7 +45,7 @@
 
         <p> Track all of your orders here... </p>
 
-        <a class="btn btn-primary navbar-btn text-white" type="button"  href="#"> My orders </a>
+        <a class="btn btn-primary navbar-btn text-white" type="button"  href="{% url 'my-orders' %}"> My orders </a>
 
     </div>
 

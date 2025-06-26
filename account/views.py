@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, View, TemplateView, UpdateView, DeleteView, DetailView
+from django.views.generic import CreateView, View, TemplateView, UpdateView, DeleteView, DetailView, ListView
 from django.contrib.auth.models import User, auth
 
 from account.mixins import RedirectAuthenticatedUserMixin
@@ -16,7 +16,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib import messages
 from payment.forms import ShippingAddressForm
-from payment.models import ShippingAddress
+from payment.models import ShippingAddress, Order, OrderItem
 
 
 
@@ -135,3 +135,13 @@ class ManageShippingView(LoginRequiredMixin, UpdateView):
         if form.instance.user is None:
             form.instance.user = self.request.user
         return super().form_valid(form)
+    
+
+class MyOrdersView(LoginRequiredMixin, ListView):
+    model = OrderItem
+    template_name = 'account/track-orders.html'
+    context_object_name = 'orders'
+
+    def get_queryset(self):
+        return OrderItem.objects.filter(user=self.request.user)
+    
